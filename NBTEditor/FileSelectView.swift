@@ -7,10 +7,29 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import MinecraftNBT
+
+func isDataGzip(data : Data) -> Bool{
+    guard data.count >= 2 else {
+        return false;
+    }
+    
+    return data[0] == 0x1F && data[1] == 0x8B;
+}
+
+func showUnsppourtedFileAlert(){
+    let alert = NSAlert()
+    alert.messageText = "Failed to open file"
+    alert.informativeText = "Please make sure it's a valid NBT format file."
+    alert.alertStyle = .warning
+    alert.addButton(withTitle: "OK")
+    
+    alert.runModal();
+}
 
 struct FileSelectView : View{
     
-    @Binding var data: Data?
+    @Binding var data: NBTStructure?
     
     var body: some View {
         VStack{
@@ -33,7 +52,21 @@ struct FileSelectView : View{
         
         if dialog.runModal() == .OK, let url = dialog.url {
             do {
-                data = try Data(contentsOf: url)
+                let binaryData = try Data(contentsOf: url)
+                let structure: NBTStructure?
+
+                if isDataGzip(data: binaryData) {
+                    structure = NBTStructure(compressed: binaryData)
+                } else {
+                    structure = NBTStructure(decompressed: binaryData)
+                }
+
+                guard structure != nil else {
+                    showUnsppourtedFileAlert()
+                    return
+                }
+                
+                self.data = structure
             } catch {
                 let alert = NSAlert()
                 alert.messageText = "Failed to open file"

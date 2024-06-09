@@ -10,11 +10,10 @@ import MinecraftNBT
 
 struct NBTView : View {
     
-    @Binding var data: Data?
-    @State var nbtStructure : NBTStructure = NBTStructure()
+    @Binding var data: NBTStructure?
     
     var body: some View {
-        let tag = NBTStructure(compressed: data!)!.tag
+        let tag = data!.tag
         List {
             ForEach(tag.contents.keys, id: \.self){ key in
                 generateTree(name: key, tag: tag[key]!)

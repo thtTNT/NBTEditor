@@ -7,10 +7,11 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import MinecraftNBT
 
 
 struct ContentView: View {
-    @State private var data : Data? = nil
+    @State private var data : NBTStructure? = nil
     
     var body: some View {
         if data == nil {
@@ -22,51 +23,6 @@ struct ContentView: View {
     
 }
 
-
-struct Sidebar: View {
-    var body: some View {
-        ZStack {
-            VisualEffectView()
-                .edgesIgnoringSafeArea(.all)
-            VStack(alignment: .leading) {
-                Text("Item 1")
-                Text("Item 2")
-                Text("Item 3")
-                Spacer()
-            }
-            .padding()
-        }
-        .frame(minWidth: 200)
-    }
-}
-
-struct VisualEffectView: View {
-    var body: some View {
-        VStack {
-            Spacer()
-        }
-        .background(.regularMaterial)
-        .cornerRadius(10)
-    }
-}
-
-//struct VisualEffectView: NSViewRepresentable {
-//    var material: NSVisualEffectView.Material
-//    var blendingMode: NSVisualEffectView.BlendingMode
-//
-//    func makeNSView(context: Context) -> NSVisualEffectView {
-//        let view = NSVisualEffectView()
-//        view.material = material
-//        view.blendingMode = blendingMode
-//        view.state = .active
-//        return view
-//    }
-//
-//    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
-//        nsView.material = material
-//        nsView.blendingMode = blendingMode
-//    }
-//}
 #Preview {
     ContentView()
 }
