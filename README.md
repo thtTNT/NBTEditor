@@ -10,9 +10,9 @@ The scope of this project is:
 
 - Friendly UI
 
-![](/Users/tuhaotian/Library/Application%20Support/marktext/images/2024-06-09-16-47-03-image.png)
+![](images/image1.png)
 
-![](/Users/tuhaotian/Library/Application%20Support/marktext/images/2024-06-09-16-46-36-image.png)
+![](images/image2.png)
 
 ## Download
 
