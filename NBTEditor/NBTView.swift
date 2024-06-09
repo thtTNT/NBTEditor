@@ -14,20 +14,16 @@ struct NBTView : View {
     @State var nbtStructure : NBTStructure = NBTStructure()
     
     var body: some View {
+        let tag = NBTStructure(compressed: data!)!.tag
         List {
-            generateTree(name: "Root", tag: NBTStructure(compressed: data!)!.tag)
+            ForEach(tag.contents.keys, id: \.self){ key in
+                generateTree(name: key, tag: tag[key]!)
+            }
         }
     }
     
-    func updateNBTStructure(){
-        if data == nil {
-            return
-        }
-        self.nbtStructure = NBTStructure(compressed: data!)!
-    }
     
     func generateTree(name: String, tag: any NBTTag) -> AnyView{
-        
         switch tag{
         case is NBTByte:
             return AnyView(
@@ -89,8 +85,10 @@ struct NBTView : View {
             let list = tag as! NBTList
             return AnyView(DisclosureGroup(
                 content: {
-                    ForEach(0..<list.elements.count,id: \.self){ index in
-                        generateTree(name: String(index), tag: list.elements[index])
+                    if list.elements.count != 0 {
+                        ForEach(0..<list.elements.count,id: \.self){ index in
+                            generateTree(name: String(index), tag: list.elements[index])
+                        }
                     }
                 },
                 label: {
@@ -99,8 +97,7 @@ struct NBTView : View {
                         Text(name).bold()
                     }
                 }
-            )
-            )
+            ))
         case is NBTCompound:
             let compound = tag as! NBTCompound
             return AnyView(DisclosureGroup(
@@ -115,16 +112,16 @@ struct NBTView : View {
                         Text(name).bold()
                     }
                 }
-            )
-            )
+            ))
         default:
-            return AnyView(
-                HStack {
-                    LetterView(letter: "U", color: Color.pink)
-                    Text(name + ": ").bold()
-                    Text(tag.description)
-                }
-            )
+            //            return AnyView(
+            //                HStack {
+            //                    LetterView(letter: "U", color: Color.pink)
+            //                    Text(name + ": ").bold()
+            //                    Text(tag.description)
+            //                }
+            //            )
+            return AnyView(Text("Unkown"))
         }
     }
     
