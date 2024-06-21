@@ -14,6 +14,7 @@
 		4488D4D22C136C59008B9D19 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4488D4D12C136C59008B9D19 /* ContentView.swift */; };
 		4488D4D42C136C5A008B9D19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4488D4D32C136C5A008B9D19 /* Assets.xcassets */; };
 		4488D4D72C136C5A008B9D19 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4488D4D62C136C5A008B9D19 /* Preview Assets.xcassets */; };
+		44B6EAEE2C1FE99700C2FFD4 /* NBTDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B6EAED2C1FE99700C2FFD4 /* NBTDocument.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,8 @@
 		4488D4D32C136C5A008B9D19 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4488D4D62C136C5A008B9D19 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4488D4D82C136C5A008B9D19 /* NBTEditor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NBTEditor.entitlements; sourceTree = "<group>"; };
+		44B693382C24000500DA82FB /* NBTEditorRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NBTEditorRelease.entitlements; sourceTree = "<group>"; };
+		44B6EAED2C1FE99700C2FFD4 /* NBTDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBTDocument.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,10 +61,12 @@
 		4488D4CE2C136C59008B9D19 /* NBTEditor */ = {
 			isa = PBXGroup;
 			children = (
+				44B693382C24000500DA82FB /* NBTEditorRelease.entitlements */,
 				4488D4CF2C136C59008B9D19 /* NBTEditorApp.swift */,
 				4488D4D12C136C59008B9D19 /* ContentView.swift */,
 				44736D022C14452A00EA5121 /* FileSelectView.swift */,
 				44736D042C14466200EA5121 /* NBTView.swift */,
+				44B6EAED2C1FE99700C2FFD4 /* NBTDocument.swift */,
 				4488D4D32C136C5A008B9D19 /* Assets.xcassets */,
 				4488D4D82C136C5A008B9D19 /* NBTEditor.entitlements */,
 				4488D4D52C136C5A008B9D19 /* Preview Content */,
@@ -153,6 +158,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44B6EAEE2C1FE99700C2FFD4 /* NBTDocument.swift in Sources */,
 				44736D032C14452A00EA5121 /* FileSelectView.swift in Sources */,
 				4488D4D22C136C59008B9D19 /* ContentView.swift in Sources */,
 				4488D4D02C136C59008B9D19 /* NBTEditorApp.swift in Sources */,
@@ -315,7 +321,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = NBTEditor/NBTEditor.entitlements;
+				CODE_SIGN_ENTITLEMENTS = NBTEditor/NBTEditorRelease.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;

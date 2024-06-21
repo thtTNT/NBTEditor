@@ -1,8 +1,10 @@
 # NBTEditor
 
-This application is a MacOS Application that allows users to read and edit NBT files from Minecraft.
+This is a MacOS application that allows users to read and edit NBT files in Minecraft.
+If you find this project useful give me a Star.
+**This project is still in development and all bug reports and feature requests are welcome.**
 
-The scope of this project is:
+The goal of this project is:
 
 - Complete
 
@@ -22,7 +24,13 @@ This pre-released version can be found on the release page.
 
 - [x] Read NBT
 
-- [ ] Edit NBT
+- [x] Edit Value
+
+- [ ] Rename
+
+- [ ] Delete Value
+
+- [ ] Add Value
 
 - [ ] Better UI
 

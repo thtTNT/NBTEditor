@@ -11,18 +11,12 @@ import MinecraftNBT
 
 
 struct ContentView: View {
-    @State private var data : NBTStructure? = nil
+    
+    @Binding var document : NBTDocument
     
     var body: some View {
-        if data == nil {
-            FileSelectView(data: $data)
-        }else{
-            NBTView(data: $data)
-        }
+        NBTView(data: $document.nbt)
     }
     
-}
-
-#Preview {
-    ContentView()
+    
 }
