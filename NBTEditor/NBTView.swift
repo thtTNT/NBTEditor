@@ -12,9 +12,10 @@ struct NBTView : View {
     
     @Binding var data: NBTStructure
     
-    @State var SelectedKey : [String] = []
+    @State var selectKey : [String] = []
     
     @State var editSheetVisible = false
+    @State var renameSheetVisible = false
     
     var body: some View {
         let tag = data.tag
@@ -25,9 +26,34 @@ struct NBTView : View {
         }.sheet(isPresented: $editSheetVisible){
             EditValueSheetView(
                 nbt: $data,
-                key: $SelectedKey,
-                visiable: $editSheetVisible
+                key: $selectKey,
+                visible: $editSheetVisible
             )
+        }.sheet(isPresented: $renameSheetVisible){
+            RenameSheetView(
+                nbt: $data,
+                key: $selectKey,
+                visible: $renameSheetVisible
+            )
+        }
+    }
+    
+    func getMenuItems(key: [String], tag : any NBTTag) -> some View{
+        let parent = try! self.data.read(Array(key[0..<key.count-1]))
+        return Group{
+            if !(parent is NBTList){
+                Button("Rename"){
+                    self.selectKey = key
+                    self.renameSheetVisible.toggle()
+                }
+            }
+            if !(tag is NBTCompound) && !(tag is NBTList){
+                Button("Edit Value"){
+                    self.selectKey = key
+                    self.editSheetVisible.toggle()
+                }
+            }
+            Button("Delete Value"){}.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
         }
     }
     
@@ -55,14 +81,10 @@ struct NBTView : View {
                 letterView
                 Text(name + ":").bold()
                 Text(tag.description)
-            }.contextMenu(menuItems: {
-                Button("Rename"){}.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-                Button("Edit Value"){
-                    self.SelectedKey = key
-                    self.editSheetVisible.toggle()
-                }
-                Button("Delete Value"){}.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-            })
+            }
+            .contextMenu{
+                getMenuItems(key: key, tag: tag)
+            }
             
         )
     }
@@ -98,6 +120,8 @@ struct NBTView : View {
                     HStack {
                         LetterView(letter: "A", color: Color(red: 228 / 255, green: 139 / 255, blue: 51 / 255))
                         Text(name).bold()
+                    }.contextMenu{
+                        getMenuItems(key: key, tag: tag)
                     }
                 }
             ))
@@ -113,6 +137,8 @@ struct NBTView : View {
                     HStack {
                         LetterView(letter: "C", color: Color(red: 242 / 255, green: 194 / 255, blue: 79 / 255))
                         Text(name).bold()
+                    }.contextMenu{
+                        getMenuItems(key: key, tag: tag)
                     }
                 }
             ))
@@ -138,25 +164,85 @@ struct LetterView: View {
     }
 }
 
+func writeToNBT(nbt : NBTStructure, type : NBTTagType, key : [String], value: Any){
+    
+}
+
+let PRIMITIVE_TYPES = [
+    NBTTagType.byte,
+    NBTTagType.short,
+    NBTTagType.int,
+    NBTTagType.long,
+    NBTTagType.float,
+    NBTTagType.double,
+    NBTTagType.string
+]
+
+struct RenameSheetView : View {
+    
+    @Binding var nbt : NBTStructure
+    @Binding var key : [String]
+    @Binding var visible : Bool
+    
+    @State var name : String = ""
+    @State var tag : (any NBTTag)!
+    
+    @State var alertDuplicateKey = false
+    
+    var body : some View {
+        VStack(alignment: .leading){
+            Text("Input a name:")
+            TextField("Enter a name",text : $name)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .frame(minWidth: 320)
+            Divider()
+            HStack{
+                Spacer()
+                Button("Cancel"){
+                    visible.toggle()
+                }
+                Button("Confirm"){
+                    let parentKey = Array(key[0..<key.count-1])
+                    var parentCompound = try! self.nbt.read(parentKey)! as! NBTCompound
+                    
+                    if (parentCompound.contents.keys.contains(name)){
+                        self.alertDuplicateKey.toggle()
+                        return
+                    }
+                    
+                    let keyIndex = parentCompound.contents.index(forKey: key[key.count - 1])!
+                    parentCompound.contents[name] = tag
+                    parentCompound.contents.swapAt(keyIndex, parentCompound.contents.count - 1)
+                    parentCompound.contents.removeLast()
+                    
+                    try! nbt.write(parentCompound, to: parentKey)
+                    visible.toggle()
+                }.buttonStyle(.borderedProminent)
+                    .keyboardShortcut(.defaultAction)
+            }
+        }.padding()
+            .onAppear(){
+                self.name = key.last!
+                self.tag = try! nbt.read(key)!
+            }.alert(isPresented: $alertDuplicateKey) {
+                Alert(
+                    title: Text("Duplicate Key"),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+    }
+}
+
 struct EditValueSheetView : View {
     
     @Binding var nbt : NBTStructure
     @Binding var key : [String]
-    @Binding var visiable : Bool
+    @Binding var visible : Bool
     
     @State private var type = 0
     @State var valueText : String = ""
     @State var errorAlert = false
     
-    let types = [
-        NBTTagType.byte,
-        NBTTagType.short,
-        NBTTagType.int,
-        NBTTagType.long,
-        NBTTagType.float,
-        NBTTagType.double,
-        NBTTagType.string
-    ]
     
     let foramt = [
         NBTTagType.byte: "[\(Int8.min),\(Int8.max)]",
@@ -171,8 +257,8 @@ struct EditValueSheetView : View {
     var body: some View {
         VStack(alignment: .leading){
             Picker("Value Type", selection: $type){
-                ForEach(types.indices, id: \.self) { index in
-                    Text(types[index].description)
+                ForEach(PRIMITIVE_TYPES.indices, id: \.self) { index in
+                    Text(PRIMITIVE_TYPES[index].description)
                 }
             }
             Text("Input a value:")
@@ -183,15 +269,15 @@ struct EditValueSheetView : View {
             HStack{
                 Spacer()
                 Button("Cancel"){
-                    visiable.toggle()
+                    visible.toggle()
                 }
                 Button("Confirm"){
-                    switch (types[self.type]){
+                    switch (PRIMITIVE_TYPES[self.type]){
                     case NBTTagType.byte:
                         if let value = Int8(self.valueText){
                             let tag : any NBTTag = value
                             try! nbt.write(tag, to: key)
-                            visiable.toggle()
+                            visible.toggle()
                         }else{
                             self.errorAlert = true
                         }
@@ -199,7 +285,7 @@ struct EditValueSheetView : View {
                         if let value = Int16(self.valueText){
                             let tag : any NBTTag = value
                             try! nbt.write(tag, to: key)
-                            visiable.toggle()
+                            visible.toggle()
                         }else{
                             self.errorAlert = true
                         }
@@ -207,7 +293,7 @@ struct EditValueSheetView : View {
                         if let value = Int32(self.valueText){
                             let tag : any NBTTag = value
                             try! nbt.write(tag, to: key)
-                            visiable.toggle()
+                            visible.toggle()
                         }else{
                             self.errorAlert = true
                         }
@@ -215,7 +301,7 @@ struct EditValueSheetView : View {
                         if let value = Int64(self.valueText){
                             let tag : any NBTTag = value
                             try! nbt.write(tag, to: key)
-                            visiable.toggle()
+                            visible.toggle()
                         }else{
                             self.errorAlert = true
                         }
@@ -223,7 +309,7 @@ struct EditValueSheetView : View {
                         if let value = Float32(self.valueText){
                             let tag : any NBTTag = value
                             try! nbt.write(tag, to: key)
-                            visiable.toggle()
+                            visible.toggle()
                         }else{
                             self.errorAlert = true
                         }
@@ -231,14 +317,14 @@ struct EditValueSheetView : View {
                         if let value = Float64(self.valueText){
                             let tag : any NBTTag = value
                             try! nbt.write(tag, to: key)
-                            visiable.toggle()
+                            visible.toggle()
                         }else{
                             self.errorAlert = true
                         }
                     case NBTTagType.string:
                         let tag : any NBTTag = valueText
                         try! nbt.write(tag, to: key)
-                        visiable.toggle()
+                        visible.toggle()
                     default:
                         break
                     }
@@ -248,12 +334,12 @@ struct EditValueSheetView : View {
         }.padding()
             .onAppear(){
                 let tag = try! nbt.read(key)
-                self.type = types.firstIndex(of: tag!.type)!
+                self.type = PRIMITIVE_TYPES.firstIndex(of: tag!.type)!
                 self.valueText = tag!.description
             }.alert(isPresented: $errorAlert) {
                 Alert(
                     title: Text("Invalid Value"),
-                    message: Text("Accept Format: " + self.foramt[types[self.type]]!),
+                    message: Text("Accept Format: " + self.foramt[PRIMITIVE_TYPES[self.type]]!),
                     dismissButton: .default(Text("OK"))
                 )
             }

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		44736D012C14436F00EA5121 /* MinecraftNBT in Frameworks */ = {isa = PBXBuildFile; productRef = 44736D002C14436F00EA5121 /* MinecraftNBT */; };
-		44736D032C14452A00EA5121 /* FileSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44736D022C14452A00EA5121 /* FileSelectView.swift */; };
 		44736D052C14466200EA5121 /* NBTView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44736D042C14466200EA5121 /* NBTView.swift */; };
 		4488D4D02C136C59008B9D19 /* NBTEditorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4488D4CF2C136C59008B9D19 /* NBTEditorApp.swift */; };
 		4488D4D22C136C59008B9D19 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4488D4D12C136C59008B9D19 /* ContentView.swift */; };
@@ -18,7 +17,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		44736D022C14452A00EA5121 /* FileSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSelectView.swift; sourceTree = "<group>"; };
 		44736D042C14466200EA5121 /* NBTView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBTView.swift; sourceTree = "<group>"; };
 		4488D4CC2C136C59008B9D19 /* NBTEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NBTEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4488D4CF2C136C59008B9D19 /* NBTEditorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBTEditorApp.swift; sourceTree = "<group>"; };
@@ -64,7 +62,6 @@
 				44B693382C24000500DA82FB /* NBTEditorRelease.entitlements */,
 				4488D4CF2C136C59008B9D19 /* NBTEditorApp.swift */,
 				4488D4D12C136C59008B9D19 /* ContentView.swift */,
-				44736D022C14452A00EA5121 /* FileSelectView.swift */,
 				44736D042C14466200EA5121 /* NBTView.swift */,
 				44B6EAED2C1FE99700C2FFD4 /* NBTDocument.swift */,
 				4488D4D32C136C5A008B9D19 /* Assets.xcassets */,
@@ -159,7 +156,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				44B6EAEE2C1FE99700C2FFD4 /* NBTDocument.swift in Sources */,
-				44736D032C14452A00EA5121 /* FileSelectView.swift in Sources */,
 				4488D4D22C136C59008B9D19 /* ContentView.swift in Sources */,
 				4488D4D02C136C59008B9D19 /* NBTEditorApp.swift in Sources */,
 				44736D052C14466200EA5121 /* NBTView.swift in Sources */,

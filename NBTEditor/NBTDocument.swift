@@ -9,7 +9,13 @@ import SwiftUI
 import UniformTypeIdentifiers
 import MinecraftNBT
 
-
+func isDataGzip(data : Data) -> Bool{
+    guard data.count >= 2 else {
+        return false;
+    }
+    
+    return data[0] == 0x1F && data[1] == 0x8B;
+}
 
 struct NBTDocument : FileDocument {
     static var readableContentTypes: [UTType] = [UTType.data]
