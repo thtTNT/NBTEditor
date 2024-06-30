@@ -53,7 +53,9 @@ struct NBTView : View {
                     self.editSheetVisible.toggle()
                 }
             }
-            Button("Delete Value"){}.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            Button("Delete Value"){
+                self.deleteElement(key: key)
+            }
         }
     }
     
@@ -147,6 +149,29 @@ struct NBTView : View {
         }
     }
     
+    func deleteElement(key: [String]){
+        let parentKey = Array(key[0..<key.count - 1])
+        let parent = try! self.data.read(parentKey)!
+        
+        if parent is NBTCompound{
+            let itemName = key[key.count - 1]
+            var compound = parent as! NBTCompound
+            
+            compound.contents.removeValue(forKey: itemName)
+            try! self.data.write(compound, to: parentKey)
+        }
+        
+        if parent is NBTList {
+            let itemIndex = Int(key[key.count - 1])!
+            var list = parent as! NBTList
+            
+            list.elements.remove(at: itemIndex)
+            try! self.data.write(list, to: parentKey)
+        }
+        
+        
+    }
+    
 }
 
 struct LetterView: View {
@@ -162,9 +187,6 @@ struct LetterView: View {
             .background(color)
             .cornerRadius(2)
     }
-}
-
-func writeToNBT(nbt : NBTStructure, type : NBTTagType, key : [String], value: Any){
     
 }
 

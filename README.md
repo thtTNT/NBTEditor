@@ -26,9 +26,9 @@ This pre-released version can be found on the release page.
 
 - [x] Edit Value
 
-- [ ] Rename
+- [x] Rename
 
-- [ ] Delete Value
+- [x] Delete Value
 
 - [ ] Add Value
 
